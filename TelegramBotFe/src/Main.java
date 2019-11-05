@@ -60,18 +60,49 @@ public class Main {
 				aux = 1;
 				//atualização do off-set
 				m = update.updateId()+1;
-				
+
 				System.out.println("Recebendo mensagem:"+ update.message().text());
+
+				String respostaMenu = update.message().text();
+				if (respostaMenu.equals("1")) {
+                    sendResponse = bot.execute(new SendMessage(update.message().chat().id(),"" +
+                            "########### BOT FÉ - CADASTRAR LOCALIZAÇÃO ###########\n" +
+                            "1. inserir drogas\n" +
+                            "2. nao sei oq precisa na localização\n"));
+                    System.out.println("Mensagem Enviada?" +sendResponse.isOk());
+				} else if (respostaMenu.equals("2")) {
+
+                } else if (respostaMenu.equals("3")) {
+
+                } else if (respostaMenu.equals("4")) {
+
+                } else if (respostaMenu.equals("5")) {
+
+                } else if (respostaMenu.equals("6")) {
+
+                } else if (respostaMenu.equals("7")) {
+
+                } else if (respostaMenu.equals("8")) {
+
+                } else if (respostaMenu.equals("9")) {
+
+                } else if (respostaMenu.equals("10")) {
+
+                } else if (respostaMenu.equals("11")) {
+
+                } else {
+                    //sendResponse = bot.execute(new SendMessage(update.message().chat().id(),"" + "####### OPÇÃO INVÁLIDA, INISIRA NOVAMENTE #######\n"));
+				}
 				
 				//envio de "Escrevendo" antes de enviar a resposta
 				baseResponse = bot.execute(new SendChatAction(update.message().chat().id(), ChatAction.typing.name()));
 				//verificação de ação de chat foi enviada com sucesso
 				System.out.println("Resposta de Chat Action Enviada?" + baseResponse.isOk());
-				
 				//envio da mensagem de resposta
-				sendResponse = bot.execute(new SendMessage(update.message().chat().id(),"Não entendi..."));
+                // sendResponse = bot.execute(new SendMessage(update.message().chat().id(),"Não entendi..."));
 				//verificação de mensagem enviada com sucesso
-				System.out.println("Mensagem Enviada?" +sendResponse.isOk());
+                //System.out.println("Mensagem Enviada?" +sendResponse.isOk());
+
 				
 			}
 
