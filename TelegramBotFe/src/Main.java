@@ -66,10 +66,14 @@ public class Main {
 				String respostaMenu = update.message().text();
 				if (respostaMenu.equals("1")) {
                     sendResponse = bot.execute(new SendMessage(update.message().chat().id(),"" +
-                            "########### BOT FÉ - CADASTRAR LOCALIZAÇÃO ###########\n" +
-                            "1. inserir drogas\n" +
-                            "2. nao sei oq precisa na localização\n"));
-                    System.out.println("Mensagem Enviada?" +sendResponse.isOk());
+                        "########### BOT FÉ - CADASTRAR LOCALIZAÇÃO ###########\n" +
+                        "1. Insira o nome do local \n"));
+                        String nomeLocal = update.message().text();
+                    sendResponse = bot.execute(new SendMessage(update.message().chat().id(),"" +
+                            "2. Insira a descrição do local \n"));
+                        String descricaoLocal = update.message().text();
+                    System.out.println("nome local:" + nomeLocal);
+                    System.out.println("descricao local" + descricaoLocal);
 				} else if (respostaMenu.equals("2")) {
 
                 } else if (respostaMenu.equals("3")) {
