@@ -3,10 +3,10 @@ public class Bem {
     private String nome;
     private String descricao;
     private Localizacao localização;
-    private CategoriaBem categoria;
+    private Categoria categoria;
 
 
-    public Bem(String codigo, String nome, String descricao, Localizacao localização, CategoriaBem categoria) {
+    public Bem(String codigo, String nome, String descricao, Localizacao localização, Categoria categoria) {
         this.codigo = codigo;
         this.nome = nome;
         this.descricao = descricao;
@@ -21,6 +21,6 @@ public class Bem {
     public void setNome(String nome) { this.nome = nome; }
     public String getDescricao() { return descricao; }
     public void setDescricao(String descricao) { this.descricao = descricao; }
-    public CategoriaBem getCategoria() { return categoria; }
+    public Categoria getCategoria() { return categoria; }
     public Localizacao getLocalização() { return localização; }
 }

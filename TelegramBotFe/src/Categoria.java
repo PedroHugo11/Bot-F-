@@ -1,10 +1,10 @@
-public class CategoriaBem {
+public class Categoria {
 
     private String codigo;
     private String nome;
     private String descricao;
 
-    public CategoriaBem(String codigo, String nome) {
+    public Categoria(String codigo, String nome) {
         this.codigo = codigo;
         this.nome = nome;
     }
