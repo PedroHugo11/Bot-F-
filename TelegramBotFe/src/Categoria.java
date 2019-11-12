@@ -4,9 +4,10 @@ public class Categoria {
     private String nome;
     private String descricao;
 
-    public Categoria(String codigo, String nome) {
+    public Categoria(String codigo, String nome, String descricao) {
         this.codigo = codigo;
         this.nome = nome;
+        this.descricao = descricao;
     }
 
     //GETTERS E SETTERS

@@ -6,6 +6,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.ChatAction;
 import com.pengrad.telegrambot.request.GetUpdates;
 import com.pengrad.telegrambot.request.SendChatAction;
+import com.pengrad.telegrambot.request.SendDocument;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.BaseResponse;
 import com.pengrad.telegrambot.response.GetUpdatesResponse;
@@ -28,8 +29,15 @@ public class Main {
         //controle de off-set, isto é, a partir deste ID será lido as mensagens pendentes na fila
         int m = 0;
 
-        //auxiliar para exibir menu só uma vez
-        int aux = 0;
+        Localizacao localizacao = new Localizacao(null, null);
+        Categoria categoria = new Categoria(null, null, null);
+        Bem bem = new Bem(null, null,null, null, null);
+
+        boolean controle_localizacao = false;
+        boolean controle_categoria = false;
+        boolean controle_bem = false;
+
+        Gerenciador gerencia = new Gerenciador(bot);
 
         //loop infinito pode ser alterado por algum timer de intervalo curto
         while (true) {
@@ -44,7 +52,7 @@ public class Main {
             for (Update update : updates) {
 
                 String iniciaBot = update.message().text();
-                if (iniciaBot.toString().equals("/start")) {
+                if (iniciaBot.equals("/menu") || iniciaBot.equals("/start") || iniciaBot.equals("Oi")) {
                     sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "" +
                             "########### BOT FÉ - MENU PRINCIPAL ###########\n" +
                             "1. Cadastrar localização\n" +
@@ -57,8 +65,8 @@ public class Main {
                             "8. Buscar bem por nome\n" +
                             "9. Buscar bem por descrição\n" +
                             "10. Movimentar bem\n" +
-                            "11. Gerar relatório\n"));
-                    aux = 1;
+                            "11. Gerar relatório\n\n" +
+                            "# Insira o número correspondente ao que deseja #"));
                 }
 
                 //atualização do off-set
@@ -68,44 +76,80 @@ public class Main {
 
                 String respostaMenu = update.message().text();
 
-                if (respostaMenu.equals("1")) {
+//############################################################ 2 ESCOLHA ##################################################################
 
-                    Gerenciador gerencia = new Gerenciador(bot);
-                    gerencia.cadastrarLocalizacao();
+                if (respostaMenu.equals("1") || controle_localizacao) {
+                    if(localizacao.getNome() == null) {
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "##### CADASTRAR LOCALIZAÇÃO #####\n"));
+                        m = update.updateId() + 1;
 
-                } else if (respostaMenu.equals("2")) {
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite o nome da localização: "));
+                        m = update.updateId() + 1;
 
-                } else if (respostaMenu.equals("3")) {
+                        localizacao.setNome(update.message().text());
+                        controle_localizacao = true;
+                    }
+                    else if (localizacao.getDescricao() == null) {
+                        localizacao.setNome(update.message().text());
 
-                } else if (respostaMenu.equals("4")) {
-
-                } else if (respostaMenu.equals("5")) {
-
-                } else if (respostaMenu.equals("6")) {
-
-                } else if (respostaMenu.equals("7")) {
-
-                } else if (respostaMenu.equals("8")) {
-
-                } else if (respostaMenu.equals("9")) {
-
-                } else if (respostaMenu.equals("10")) {
-
-                } else if (respostaMenu.equals("11")) {
-
-                } else {
-                    //sendResponse = bot.execute(new SendMessage(update.message().chat().id(),"" + "####### OPÇÃO INVÁLIDA, INISIRA NOVAMENTE #######\n"));
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite a sua descrição: "));
+                        localizacao.setDescricao(update.message().text());
+                    }
+                    else if (localizacao.getDescricao() != null) {
+                        localizacao.setDescricao(update.message().text());
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "\nNome: " +
+                                localizacao.getNome() + "\nDescrição: "+ localizacao.getDescricao()));
+                        gerencia.getLocalizacoes().add(localizacao);
+                        localizacao = new Localizacao(null, null);
+                        controle_localizacao = false;
+                    }
                 }
+
+//############################################################ 2 ESCOLHA ##################################################################
+
+                if (respostaMenu.equals("2") || controle_categoria) {
+                    if(categoria.getCodigo() == null) {
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "##### CADASTRAR CATEGORIA #####\n"));
+                        m = update.updateId() + 1;
+
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite o código da categoria:"));
+                        m = update.updateId() + 1;
+
+                        categoria.setCodigo(update.message().text());
+                        controle_categoria = true;
+                    }
+                    else if(categoria.getNome() == null) {
+                        categoria.setCodigo(update.message().text());
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite o nome da categoria:"));
+                        m = update.updateId() + 1;
+
+                        categoria.setNome(update.message().text());
+                        controle_categoria = true;
+                    }
+                    else if (categoria.getDescricao() == null) {
+                        categoria.setNome(update.message().text());
+
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite a descrição da cateogira: "));
+                        categoria.setDescricao(update.message().text());
+                    }
+                    else if (categoria.getDescricao() != null) {
+                        categoria.setDescricao(update.message().text());
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "\nCódigo: "+ categoria.getCodigo() + "\nNome: " +
+                                categoria.getNome() + "\nDescrição: "+ categoria.getDescricao()));
+                        gerencia.getCategorias().add(categoria);
+                        categoria = new Categoria(null, null, null);
+                        controle_categoria = false;
+                    }
+
+                }
+
+//############################################################ 2 ESCOLHA ##################################################################
+
 
                 //envio de "Escrevendo" antes de enviar a resposta
                 baseResponse = bot.execute(new SendChatAction(update.message().chat().id(), ChatAction.typing.name()));
                 //verificação de ação de chat foi enviada com sucesso
                 System.out.println("Resposta de Chat Action Enviada?" + baseResponse.isOk());
-                //envio da mensagem de resposta
-                // sendResponse = bot.execute(new SendMessage(update.message().chat().id(),"Não entendi..."));
-                //verificação de mensagem enviada com sucesso
-                //System.out.println("Mensagem Enviada?" +sendResponse.isOk());
-
 
             }
 

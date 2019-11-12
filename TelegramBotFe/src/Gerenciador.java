@@ -14,54 +14,16 @@ public class Gerenciador {
     private ArrayList<Localizacao> localizacoes = new ArrayList<Localizacao>();
     private ArrayList<Categoria> categorias = new ArrayList<Categoria>();
 
-
     public Gerenciador(TelegramBot bot) {
         this.bot = bot;
     }
 
-    public void cadastrarLocalizacao() {
-
-        int m = 0;
-        //int aux = 0;
-            
-        GetUpdatesResponse updatesResponse = (this.bot).execute(new GetUpdates().limit(100).offset(m));
-        List<Update> updates = updatesResponse.updates();
-        int aux = 0;
-        for (Update update : updates) {
-
-            if(aux == 0){
-                SendResponse sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "" +
-                        "### BOT FÉ - CADASTRAR LOCALIZAÇÃO ###\n" +
-                        "1. Insira o nome do local \n"));
-                aux++;
-                String nomeLocal = update.editedMessage().text();
-                m = update.updateId() + 1;
-                System.out.println("nome local:" + nomeLocal);
-
-
-            }
-            if(aux == 1){
-                String nomeLocal = update.message().text();
-                System.out.println("nome local:" + nomeLocal);
-            }
-            if(aux == 0){
-                SendResponse sendResponse2 = bot.execute(new SendMessage(update.message().chat().id(), "" +
-                        "2. Insira a descrição do local \n"));
-
-                m = update.updateId() + 1;
-                String descricaoLocal = update.message().text();
-
-                System.out.println("descricao local" + descricaoLocal);
-            }
-        }
-
-//        Localizacao localizacao = new Localizacao(nome, descricao);
-//        this.localizacoes.add(localizacao);
-////        return this.localizacoes;
+    public ArrayList<Localizacao> getLocalizacoes() {
+        return localizacoes;
     }
 
-//    public void cadastrarCategoria(Categoria categoria) {
-//        this.categorias.add(categoria);
-////        return categorias
+    public ArrayList<Categoria> getCategorias() {
+        return categorias;
+    }
 
 }
