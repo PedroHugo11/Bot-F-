@@ -13,6 +13,7 @@ public class Gerenciador {
     private TelegramBot bot;
     private ArrayList<Localizacao> localizacoes = new ArrayList<Localizacao>();
     private ArrayList<Categoria> categorias = new ArrayList<Categoria>();
+    private ArrayList<Bem> bens = new ArrayList<Bem>();
 
     public Gerenciador(TelegramBot bot) {
         this.bot = bot;
@@ -26,4 +27,5 @@ public class Gerenciador {
         return categorias;
     }
 
+    public ArrayList<Bem> getBens() { return bens; }
 }

@@ -36,6 +36,8 @@ public class Main {
         boolean controle_localizacao = false;
         boolean controle_categoria = false;
         boolean controle_bem = false;
+        String auxLocalizacao = null;
+        String auxCategoria = null;
 
         Gerenciador gerencia = new Gerenciador(bot);
 
@@ -107,7 +109,7 @@ public class Main {
 
 //############################################################ 2 ESCOLHA ##################################################################
 
-                if (respostaMenu.equals("2") || controle_categoria) {
+                else if (respostaMenu.equals("2") || controle_categoria) {
                     if(categoria.getCodigo() == null) {
                         sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "##### CADASTRAR CATEGORIA #####\n"));
                         m = update.updateId() + 1;
@@ -124,7 +126,6 @@ public class Main {
                         m = update.updateId() + 1;
 
                         categoria.setNome(update.message().text());
-                        controle_categoria = true;
                     }
                     else if (categoria.getDescricao() == null) {
                         categoria.setNome(update.message().text());
@@ -143,8 +144,84 @@ public class Main {
 
                 }
 
-//############################################################ 2 ESCOLHA ##################################################################
+//############################################################ 3 ESCOLHA ##################################################################
 
+                if (respostaMenu.equals("3") || controle_bem) {
+                    if(bem.getCodigo() == null) {
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "##### CADASTRAR BEM #####\n"));
+                        m = update.updateId() + 1;
+
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite o código do bem:"));
+                        m = update.updateId() + 1;
+
+                        bem.setCodigo(update.message().text());
+                        controle_bem = true;
+                    }
+                    else if(bem.getNome() == null) {
+                        bem.setCodigo(update.message().text());
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite o nome do bem:"));
+                        m = update.updateId() + 1;
+
+                        bem.setNome(update.message().text());
+                        controle_bem = true;
+                    }
+                    else if (bem.getDescricao() == null) {
+                        bem.setNome(update.message().text());
+
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite a descrição do bem: "));
+                        bem.setDescricao(update.message().text());
+                    }
+                    else if (auxLocalizacao == null) {
+                        bem.setDescricao(update.message().text());
+
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite o nome da localização do bem: "));
+
+                        auxLocalizacao = update.message().text();
+                    }
+                    else if (auxLocalizacao != "1") {
+                        System.out.println("entrou");
+                        auxLocalizacao = update.message().text();
+
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite o nome da categoria do bem: "));
+
+                        auxCategoria = update.message().text();
+                        auxLocalizacao = "1";
+                    }
+//                    else if (auxCategoria == null ) {
+//                        System.out.println("nao entrou");
+//                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite o nome da categoria do bem: "));
+//
+//                        auxCategoria = update.message().text();
+//
+//                    }
+                    else if (auxCategoria != null) {
+                        auxCategoria= update.message().text();
+
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "\nCódigo: "+ bem.getCodigo() + "\nNome: " +
+                                bem.getNome() + "\nDescrição: "+ bem.getDescricao() + "\nLocalização: " + auxLocalizacao + "\nCategoria: " + auxCategoria));
+                        //gerencia.getBens().add(bem);
+
+                        controle_bem = false;
+                        auxCategoria = null;
+                        auxLocalizacao = null;
+                        bem = new Bem(null, null, null, null, null);
+                    }
+
+//                    else if (bem.getLocalizacao() == null) {
+//                        aux = update.message().text());
+//
+//                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite o nome da categoria do bem: "));
+//
+//                        String aux = update.message().text();
+//
+//                         /*sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "\nCódigo: "+ bem.getCodigo() + "\nNome: " +
+//                                bem.getNome() + "\nDescrição: "+ bem.getDescricao()));
+//                        gerencia.getBens().add(bem);
+//                        bem = new Bem(null, null, null, null, null);*/
+//                        controle_bem = false;
+//                    }
+
+                }
 
                 //envio de "Escrevendo" antes de enviar a resposta
                 baseResponse = bot.execute(new SendChatAction(update.message().chat().id(), ChatAction.typing.name()));
