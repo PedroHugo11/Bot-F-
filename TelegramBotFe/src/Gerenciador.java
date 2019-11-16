@@ -8,7 +8,7 @@ import com.pengrad.telegrambot.response.SendResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Gerenciador {
+public class Gerenciador implements ControlePatrimonio {
 
     private TelegramBot bot;
     private ArrayList<Localizacao> localizacoes = new ArrayList<Localizacao>();
@@ -22,11 +22,9 @@ public class Gerenciador {
     public ArrayList<Localizacao> getLocalizacoes() {
         return localizacoes;
     }
-
     public ArrayList<Categoria> getCategorias() {
         return categorias;
     }
-
     public ArrayList<Bem> getBens() { return bens; }
 
     public Localizacao buscaLocalizacaoPorNome(String localizacao) {
@@ -45,5 +43,19 @@ public class Gerenciador {
             }
         }
         return null;
+    }
+
+    @Override
+    public void movimentaBem(String codigo, Localizacao local_destino) {
+        for (Bem bem : getBens()) {
+            if (codigo.equals(bem.getCodigo())) {
+                bem.setLocalizacao(local_destino);
+            }
+        }
+    }
+
+    @Override
+    public void geraRelatorio() {
+
     }
 }

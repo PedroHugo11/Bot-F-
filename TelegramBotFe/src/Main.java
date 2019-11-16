@@ -41,6 +41,9 @@ public class Main {
         boolean controle_busca = false;
         boolean controle_nome = false;
         boolean controle_descricao = false;
+        boolean controle_movimenta = false;
+        boolean checa_codigo = false;
+        boolean checa_localizacao = false;
         String nome_localizacao = null;
         String nome_categoria = null;
         String codigo = null;
@@ -376,7 +379,54 @@ public class Main {
                         descricao = null;
                         controle_bens = null;
                     }
+                }
+                //#################### 10 ESCOLHA ########################
+                else if (respostaMenu.equals("/movimentar_bem") || controle_movimenta) {
+                    if (codigo == null){
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite o código do bem desejado: "));
+                        codigo = update.message().text();
+                        controle_movimenta = true;
 
+                    }
+                    else if(nome_localizacao == null){
+                        codigo = update.message().text();
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite a localização para onde deseja mover: "));
+                        codigo = update.message().text();
+                    }
+                    else if(codigo != "1" && nome_localizacao != "1") {
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite 1 para confirmar sua solicitação."));
+                        nome_localizacao = update.message().text();
+                        System.out.println(nome_localizacao + "opa");
+
+                        for (Bem checa_bem : gerencia.getBens()) {
+                            if(codigo.equals(checa_bem.getCodigo())) {
+                                System.out.println("1234");
+                                checa_codigo = true;
+                            }
+                            if(nome_localizacao.equals(checa_bem.getLocalizacao().getNome())) {
+                                System.out.println("4567");
+                                checa_localizacao = true;
+                                localizacao = checa_bem.getLocalizacao();
+                            }
+                        }
+                        System.out.println("entrei_aqui\n");
+                        if(checa_codigo == true && checa_localizacao == true){
+                            System.out.println("nwm wentrei\n");
+                            gerencia.movimentaBem(codigo, localizacao);
+                            controle_descricao = false;
+                            descricao = null;
+                            controle_bens = null;
+                            codigo = "1";
+                            nome_localizacao = "1";
+                            localizacao = null;
+                        }
+                    }else {
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "# Bens cadastrados com a descrição pesquisada #\n"
+                                + "- Nenhum bem está cadastrado com essa descrição."));
+                        controle_descricao = false;
+                        descricao = null;
+                        controle_bens = null;
+                    }
                 }
 
             //envio de "Escrevendo" antes de enviar a resposta
