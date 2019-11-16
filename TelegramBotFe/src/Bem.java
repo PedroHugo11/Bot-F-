@@ -23,4 +23,6 @@ public class Bem {
     public void setDescricao(String descricao) { this.descricao = descricao; }
     public Categoria getCategoria() { return categoria; }
     public Localizacao getLocalizacao() { return localizacao; }
+    public void setLocalizacao(Localizacao localizacao) { this.localizacao = localizacao; }
+    public void setCategoria(Categoria categoria) { this.categoria = categoria; }
 }

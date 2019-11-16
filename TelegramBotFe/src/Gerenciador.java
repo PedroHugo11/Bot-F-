@@ -28,4 +28,22 @@ public class Gerenciador {
     }
 
     public ArrayList<Bem> getBens() { return bens; }
+
+    public Localizacao buscaLocalizacaoPorNome(String localizacao) {
+        for (Localizacao local : getLocalizacoes()) {
+            if(localizacao.equals(local.getNome())){
+                return local;
+            }
+        }
+        return null;
+    }
+
+    public Categoria buscaCategoriaPorNome(String categoria) {
+        for (Categoria categoria_bem : getCategorias()) {
+            if(categoria.equals(categoria_bem.getNome())){
+                return categoria_bem;
+            }
+        }
+        return null;
+    }
 }
