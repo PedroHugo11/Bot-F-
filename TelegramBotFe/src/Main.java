@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pengrad.telegrambot.TelegramBot;
@@ -32,11 +33,19 @@ public class Main {
         Categoria categoria = new Categoria(null, null, null);
         Bem bem = new Bem(null, null,null, null, null);
 
+        ArrayList<Bem> controle_bens = new ArrayList<Bem>();
+
         boolean controle_localizacao = false;
         boolean controle_categoria = false;
         boolean controle_bem = false;
+        boolean controle_busca = false;
+        boolean controle_nome = false;
+        boolean controle_descricao = false;
         String nome_localizacao = null;
         String nome_categoria = null;
+        String codigo = null;
+        String nome = null;
+        String descricao = null;
 
         Gerenciador gerencia = new Gerenciador(bot);
 
@@ -256,6 +265,118 @@ public class Main {
                         sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "" +
                                 bem_listar.getNome()));
                     }
+                }
+
+                //#################### 7 ESCOLHA ########################
+                else if (respostaMenu.equals("/buscar_bem_por_codigo") || controle_busca) {
+                    if (codigo == null){
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite o código a ser buscado: "));
+                        codigo = update.message().text();
+                        controle_busca = true;
+
+                    }
+                    else if(codigo != "1"){
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite 1 para confirmar a busca"));
+                        codigo = update.message().text();
+                        for (Bem busca_bem : gerencia.getBens()) {
+                            if(codigo.equals(busca_bem.getCodigo())) {
+                                controle_bens.add(busca_bem);
+                            }
+                        }
+                        codigo = "1";
+                    }
+                    else if(!controle_bens.isEmpty()) {
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "# Bens cadastrados com o código #\n"));
+                        for (Bem bens : controle_bens) {
+                            sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Nome do bem: "
+                                    + bens.getNome() + "\nDescrição: " + bens.getDescricao() + "\nLocalização: " +
+                                    bens.getLocalizacao().getNome() + "\nCategoria: " + bens.getCategoria().getNome()));
+                        }
+                        controle_busca = false;
+                        codigo = null;
+                        controle_bens = null;
+                    }else {
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "# Bens cadastrados com o código #\n"
+                        + "- Nenhum bem está cadastrado com esse código."));
+                        controle_busca = false;
+                        codigo = null;
+                        controle_bens = null;
+                    }
+
+                }
+                //#################### 8 ESCOLHA ########################
+                else if (respostaMenu.equals("/buscar_bem_por_nome") || controle_nome) {
+                    if (nome == null){
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite o nome a ser buscado: "));
+                        nome = update.message().text();
+                        controle_nome = true;
+
+                    }
+                    else if(nome != "1"){
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite 1 para confirmar a busca"));
+                        nome = update.message().text();
+                        for (Bem busca_bem : gerencia.getBens()) {
+                            if(nome.equals(busca_bem.getNome())) {
+                                controle_bens.add(busca_bem);
+                            }
+                        }
+                        nome = "1";
+                    }
+                    else if(!controle_bens.isEmpty()) {
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "# Bens cadastrados com o nome pesquisado #\n"));
+                        for (Bem bens : controle_bens) {
+                            sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Código do bem: "
+                                    + bens.getCodigo() + "\nDescrição: " + bens.getDescricao() + "\nLocalização: " +
+                                    bens.getLocalizacao().getNome() + "\nCategoria: " + bens.getCategoria().getNome()));
+                        }
+                        controle_nome = false;
+                        nome = null;
+                        controle_bens = null;
+                    }else {
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "# Bens cadastrados com o nome pesquisado #\n"
+                                + "- Nenhum bem está cadastrado com esse nome."));
+                        controle_nome = false;
+                        nome = null;
+                        controle_bens = null;
+                    }
+
+                }
+                //#################### 9 ESCOLHA ########################
+                else if (respostaMenu.equals("/buscar_bem_por_descricao") || controle_descricao) {
+                    if (descricao == null){
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite a descrição a ser buscado: "));
+                        descricao = update.message().text();
+                        controle_descricao = true;
+
+                    }
+                    else if(descricao != "1"){
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite 1 para confirmar a busca"));
+                        descricao = update.message().text();
+                        for (Bem busca_bem : gerencia.getBens()) {
+                            if(descricao.equals(busca_bem.getDescricao())) {
+                                controle_bens.add(busca_bem);
+                            }
+                        }
+                        descricao = "1";
+                    }
+                    else if(!controle_bens.isEmpty()) {
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "# Bens cadastrados com a descricao pesquisada #\n"));
+                        for (Bem bens : controle_bens) {
+                            sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Código do bem: "
+                                    + bens.getCodigo() + "\nNome: " + bens.getNome() + "\nLocalização: " +
+                                    bens.getLocalizacao().getNome() + "\nCategoria: " + bens.getCategoria().getNome()));
+                        }
+                        controle_descricao = false;
+                        descricao = null;
+                        controle_bens = null;
+                    }else {
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "# Bens cadastrados com a descrição pesquisada #\n"
+                                + "- Nenhum bem está cadastrado com essa descrição."));
+                        controle_descricao = false;
+                        descricao = null;
+                        controle_bens = null;
+                    }
+
                 }
 
             //envio de "Escrevendo" antes de enviar a resposta
