@@ -111,8 +111,9 @@ public class Main {
                     }
                     else if (localizacao.getDescricao() != null) {
                         localizacao.setDescricao(update.message().text());
-                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "\nNome: " +
-                                localizacao.getNome() + "\nDescrição: "+ localizacao.getDescricao()));
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Localização cadastrada com sucesso!" +
+                                "\nNome: " + localizacao.getNome() + "\nDescrição: "+ localizacao.getDescricao() + "\n" +
+                                "\nPara retornar ao menu digite /menu"));
                         gerencia.getLocalizacoes().add(localizacao);
                         localizacao = new Localizacao(null, null);
                         controle_localizacao = false;
@@ -146,8 +147,9 @@ public class Main {
                     }
                     else if (categoria.getDescricao() != null) {
                         categoria.setDescricao(update.message().text());
-                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "\nCódigo: "+ categoria.getCodigo() + "\nNome: " +
-                                categoria.getNome() + "\nDescrição: "+ categoria.getDescricao()));
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Categoria cadastrada com sucesso!\nCódigo: "+ categoria.getCodigo() + "\nNome: " +
+                                categoria.getNome() + "\nDescrição: "+ categoria.getDescricao()+ "\n" +
+                                "\nPara retornar ao menu digite /menu"));
                         gerencia.getCategorias().add(categoria);
                         categoria = new Categoria(null, null, null);
                         controle_categoria = false;
@@ -206,10 +208,10 @@ public class Main {
                         }
                     }
                     else if (nome_categoria == null ) {
-                        System.out.println("nao entrou");
                         sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite o nome da categoria do bem: "));
 
                         nome_categoria = update.message().text();
+                        m = update.updateId() + 1;
 
                     }
                     else if (nome_categoria != null) {
@@ -219,9 +221,10 @@ public class Main {
 
                         if(categoria != null){
                             bem.setCategoria(categoria);
-                            sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "\nCódigo: "+ bem.getCodigo()
+                            sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Bem cadastrado com sucesso!\nCódigo: "+ bem.getCodigo()
                                     + "\nNome: " + bem.getNome() + "\nDescrição: "+ bem.getDescricao() + "\nLocalização: "
-                                    + bem.getLocalizacao().getNome() + "\nCategoria: " + bem.getCategoria().getNome()));
+                                    + bem.getLocalizacao().getNome() + "\nCategoria: " + bem.getCategoria().getNome()+ "\n" +
+                                    "\nPara retornar ao menu digite /menu"));
                             gerencia.getBens().add(bem);
 
                             controle_bem = false;
@@ -254,7 +257,7 @@ public class Main {
                 else if (respostaMenu.equals("/listar_categorias")) {
                     sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "###### CATEGORIAS CADASTRADOS ######"));
 
-                    for (Categoria catega:gerencia.getCategorias()) {
+                    for (Categoria catega : gerencia.getCategorias()) {
                         sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "" +
                                 catega.getNome()));
                     }
@@ -266,7 +269,7 @@ public class Main {
 
                     for (Bem bem_listar:gerencia.getBens()) {
                         sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "" +
-                                bem_listar.getNome()));
+                                bem_listar.getNome() + "\n" + "\nPara retornar ao menu digite /menu"));
                     }
                 }
 
@@ -293,17 +296,18 @@ public class Main {
                         for (Bem bens : controle_bens) {
                             sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Nome do bem: "
                                     + bens.getNome() + "\nDescrição: " + bens.getDescricao() + "\nLocalização: " +
-                                    bens.getLocalizacao().getNome() + "\nCategoria: " + bens.getCategoria().getNome()));
+                                    bens.getLocalizacao().getNome() + "\nCategoria: " + bens.getCategoria().getNome()
+                                    + "\n" + "\nPara retornar ao menu digite /menu"));
                         }
                         controle_busca = false;
                         codigo = null;
-                        controle_bens = null;
+                        controle_bens.clear();
                     }else {
                         sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "# Bens cadastrados com o código #\n"
-                        + "- Nenhum bem está cadastrado com esse código."));
+                        + "- Nenhum bem está cadastrado com esse código. Tente novamente com "));
                         controle_busca = false;
                         codigo = null;
-                        controle_bens = null;
+                        controle_bens.clear();
                     }
 
                 }
@@ -334,13 +338,13 @@ public class Main {
                         }
                         controle_nome = false;
                         nome = null;
-                        controle_bens = null;
+                        controle_bens.clear();
                     }else {
                         sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "# Bens cadastrados com o nome pesquisado #\n"
-                                + "- Nenhum bem está cadastrado com esse nome."));
+                                + "- Nenhum bem está cadastrado com esse nome." + "\n" + "\nPara retornar ao menu digite /menu"));
                         controle_nome = false;
                         nome = null;
-                        controle_bens = null;
+                        controle_bens.clear();
                     }
 
                 }
@@ -367,17 +371,18 @@ public class Main {
                         for (Bem bens : controle_bens) {
                             sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Código do bem: "
                                     + bens.getCodigo() + "\nNome: " + bens.getNome() + "\nLocalização: " +
-                                    bens.getLocalizacao().getNome() + "\nCategoria: " + bens.getCategoria().getNome()));
+                                    bens.getLocalizacao().getNome() + "\nCategoria: " + bens.getCategoria().getNome()
+                                    + "\n" + "\nPara retornar ao menu digite /menu"));
                         }
                         controle_descricao = false;
                         descricao = null;
-                        controle_bens = null;
+                        controle_bens.clear();
                     }else {
                         sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "# Bens cadastrados com a descrição pesquisada #\n"
                                 + "- Nenhum bem está cadastrado com essa descrição."));
                         controle_descricao = false;
                         descricao = null;
-                        controle_bens = null;
+                        controle_bens.clear();
                     }
                 }
                 //#################### 10 ESCOLHA ########################
@@ -391,41 +396,47 @@ public class Main {
                     else if(nome_localizacao == null){
                         codigo = update.message().text();
                         sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite a localização para onde deseja mover: "));
-                        codigo = update.message().text();
-                    }
-                    else if(codigo != "1" && nome_localizacao != "1") {
-                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite 1 para confirmar sua solicitação."));
                         nome_localizacao = update.message().text();
-                        System.out.println(nome_localizacao + "opa");
+                    }
+
+                    else if(codigo != null && nome_localizacao != null) {
+                        nome_localizacao = update.message().text();
 
                         for (Bem checa_bem : gerencia.getBens()) {
                             if(codigo.equals(checa_bem.getCodigo())) {
-                                System.out.println("1234");
                                 checa_codigo = true;
+                            }else {
+                                checa_codigo = false;
                             }
-                            if(nome_localizacao.equals(checa_bem.getLocalizacao().getNome())) {
-                                System.out.println("4567");
+                        }
+
+                        for (Localizacao busca_localizacao : gerencia.getLocalizacoes()) {
+                            if(nome_localizacao.equals(busca_localizacao.getNome())) {
                                 checa_localizacao = true;
-                                localizacao = checa_bem.getLocalizacao();
+                                localizacao = busca_localizacao;
+                            }else {
+                                checa_localizacao = false;
                             }
                         }
-                        System.out.println("entrei_aqui\n");
+                        System.out.println("codigo = " + checa_codigo + "\nlocal = " + checa_localizacao);
                         if(checa_codigo == true && checa_localizacao == true){
-                            System.out.println("nwm wentrei\n");
                             gerencia.movimentaBem(codigo, localizacao);
-                            controle_descricao = false;
-                            descricao = null;
-                            controle_bens = null;
-                            codigo = "1";
-                            nome_localizacao = "1";
+                            sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "# O bem foi movimentado para "
+                                    + localizacao.getNome() + " com sucesso!" + "\n" + "\nPara retornar ao menu digite /menu"));
+                            codigo = null;
+                            nome_localizacao = null;
                             localizacao = null;
+                            controle_movimenta = false;
+                            checa_codigo = false;
+                            checa_localizacao = false;
+                        }else {
+                            sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "" +
+                                    "- O código ou localização não foi encontrado nos registros. Tente novamente com /movimentar_bem."));
+                            codigo = null;
+                            nome_localizacao = null;
+                            localizacao = null;
+                            controle_movimenta = false;
                         }
-                    }else {
-                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "# Bens cadastrados com a descrição pesquisada #\n"
-                                + "- Nenhum bem está cadastrado com essa descrição."));
-                        controle_descricao = false;
-                        descricao = null;
-                        controle_bens = null;
                     }
                 }
 

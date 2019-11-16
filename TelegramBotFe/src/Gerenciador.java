@@ -52,6 +52,7 @@ public class Gerenciador implements ControlePatrimonio {
                 bem.setLocalizacao(local_destino);
             }
         }
+        System.out.println("Bem movimentado com sucesso!");
     }
 
     @Override
