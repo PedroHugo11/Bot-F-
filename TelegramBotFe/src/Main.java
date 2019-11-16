@@ -248,7 +248,7 @@ public class Main {
                         sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "" +
                                 local.getNome()));
                     }
-            }
+                }
 
                 //#################### 5 ESCOLHA ########################
                 else if (respostaMenu.equals("/listar_categorias")) {
@@ -300,7 +300,7 @@ public class Main {
                         controle_bens = null;
                     }else {
                         sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "# Bens cadastrados com o código #\n"
-                        + "- Nenhum bem está cadastrado com esse código."));
+                                + "- Nenhum bem está cadastrado com esse código."));
                         controle_busca = false;
                         codigo = null;
                         controle_bens = null;
@@ -391,8 +391,11 @@ public class Main {
                     else if(nome_localizacao == null){
                         codigo = update.message().text();
                         sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite a localização para onde deseja mover: "));
-                        codigo = update.message().text();
+                        nome_localizacao = update.message().text();
+                        System.out.println(nome_localizacao + "uepaaaaa");
+                        System.out.println(codigo + "hahaahah");
                     }
+
                     else if(codigo != "1" && nome_localizacao != "1") {
                         sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite 1 para confirmar sua solicitação."));
                         nome_localizacao = update.message().text();
@@ -403,10 +406,12 @@ public class Main {
                                 System.out.println("1234");
                                 checa_codigo = true;
                             }
-                            if(nome_localizacao.equals(checa_bem.getLocalizacao().getNome())) {
+                        }
+
+                        for (Localizacao checa_localiazcao : gerencia.getLocalizacoes()) {
+                            if(nome_localizacao.equals(checa_localiazcao.getNome())) {
                                 System.out.println("4567");
                                 checa_localizacao = true;
-                                localizacao = checa_bem.getLocalizacao();
                             }
                         }
                         System.out.println("entrei_aqui\n");
@@ -419,24 +424,25 @@ public class Main {
                             codigo = "1";
                             nome_localizacao = "1";
                             localizacao = null;
+                            controle_movimenta = false;
                         }
                     }else {
                         sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "# Bens cadastrados com a descrição pesquisada #\n"
                                 + "- Nenhum bem está cadastrado com essa descrição."));
                         controle_descricao = false;
                         descricao = null;
-                        controle_bens = null;
+                        controle_movimenta = false;
                     }
                 }
 
-            //envio de "Escrevendo" antes de enviar a resposta
-            baseResponse = bot.execute(new SendChatAction(update.message().chat().id(), ChatAction.typing.name()));
-            //verificação de ação de chat foi enviada com sucesso
-            System.out.println("Resposta de Chat Action Enviada?" + baseResponse.isOk());
+                //envio de "Escrevendo" antes de enviar a resposta
+                baseResponse = bot.execute(new SendChatAction(update.message().chat().id(), ChatAction.typing.name()));
+                //verificação de ação de chat foi enviada com sucesso
+                System.out.println("Resposta de Chat Action Enviada?" + baseResponse.isOk());
+
+            }
 
         }
 
     }
-
 }
-    }
