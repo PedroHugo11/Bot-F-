@@ -144,7 +144,7 @@ public class Main {
                 }
 
                 //#################### 3 ESCOLHA ########################
-                if (respostaMenu.equals("/cadastrar_bem") || controle_bem) {
+                else if (respostaMenu.equals("/cadastrar_bem") || controle_bem) {
                     if(bem.getCodigo() == null) {
                         sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "##### CADASTRAR BEM #####\n"));
                         m = update.updateId() + 1;
@@ -225,18 +225,47 @@ public class Main {
 
                         }
                     }
-
                 }
 
-                //envio de "Escrevendo" antes de enviar a resposta
-                baseResponse = bot.execute(new SendChatAction(update.message().chat().id(), ChatAction.typing.name()));
-                //verificação de ação de chat foi enviada com sucesso
-                System.out.println("Resposta de Chat Action Enviada?" + baseResponse.isOk());
 
+                //#################### 4 ESCOLHA ########################
+                else if (respostaMenu.equals("/listar_localizacoes")) {
+                    sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "###### LOCAIS CADASTRADOS ######"));
+
+                    for (Localizacao local:gerencia.getLocalizacoes()) {
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "" +
+                                local.getNome()));
+                    }
             }
+
+                //#################### 5 ESCOLHA ########################
+                else if (respostaMenu.equals("/listar_categorias")) {
+                    sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "###### CATEGORIAS CADASTRADOS ######"));
+
+                    for (Categoria catega:gerencia.getCategorias()) {
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "" +
+                                catega.getNome()));
+                    }
+                }
+
+                //#################### 6 ESCOLHA ########################
+                else if (respostaMenu.equals("/listar_bens_de_localizacao")) {
+                    sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "###### BENS CADASTRADOS ######"));
+
+                    for (Bem bem_listar:gerencia.getBens()) {
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "" +
+                                bem_listar.getNome()));
+                    }
+                }
+
+            //envio de "Escrevendo" antes de enviar a resposta
+            baseResponse = bot.execute(new SendChatAction(update.message().chat().id(), ChatAction.typing.name()));
+            //verificação de ação de chat foi enviada com sucesso
+            System.out.println("Resposta de Chat Action Enviada?" + baseResponse.isOk());
 
         }
 
     }
 
 }
+    }
