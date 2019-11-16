@@ -251,7 +251,7 @@ public class Main {
                         sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "" +
                                 local.getNome()));
                     }
-            }
+                }
 
                 //#################### 5 ESCOLHA ########################
                 else if (respostaMenu.equals("/listar_categorias")) {
@@ -304,7 +304,7 @@ public class Main {
                         controle_bens.clear();
                     }else {
                         sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "# Bens cadastrados com o código #\n"
-                        + "- Nenhum bem está cadastrado com esse código. Tente novamente com "));
+                                + "- Nenhum bem está cadastrado com esse código. Tente novamente com "));
                         controle_busca = false;
                         codigo = null;
                         controle_bens.clear();
@@ -440,14 +440,12 @@ public class Main {
                     }
                 }
 
-            //envio de "Escrevendo" antes de enviar a resposta
-            baseResponse = bot.execute(new SendChatAction(update.message().chat().id(), ChatAction.typing.name()));
-            //verificação de ação de chat foi enviada com sucesso
-            System.out.println("Resposta de Chat Action Enviada?" + baseResponse.isOk());
+                //envio de "Escrevendo" antes de enviar a resposta
+                baseResponse = bot.execute(new SendChatAction(update.message().chat().id(), ChatAction.typing.name()));
+                //verificação de ação de chat foi enviada com sucesso
+                System.out.println("Resposta de Chat Action Enviada?" + baseResponse.isOk());
 
+            }
         }
-
     }
-
 }
-    }
