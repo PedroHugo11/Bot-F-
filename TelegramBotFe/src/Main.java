@@ -35,6 +35,7 @@ public class Main {
 
         ArrayList<Bem> controle_bens = new ArrayList<Bem>();
 
+        boolean controle_agrupamento_local = false;
         boolean controle_localizacao = false;
         boolean controle_categoria = false;
         boolean controle_bem = false;
@@ -437,6 +438,44 @@ public class Main {
                             localizacao = null;
                             controle_movimenta = false;
                         }
+                    }
+                }
+
+                //#################### 11 ESCOLHA ########################
+                else if (respostaMenu.equals("/gerar_relatorio") ||  controle_agrupamento_local) {
+                    if (nome_localizacao == null){
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite a localização a ser buscada: "));
+                        nome_localizacao = update.message().text();
+                        controle_agrupamento_local = true;
+
+                    }
+                    else if(nome_localizacao != "1"){
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite 1 para confirmar a busca"));
+                        nome_localizacao = update.message().text();
+                        for (Bem busca_bem : gerencia.getBens()) {
+                            if(nome_localizacao.equals(busca_bem.getLocalizacao().getNome())) { // o erro deve ser aq
+                                controle_bens.add(busca_bem);
+                            }
+                        }
+                        nome_localizacao = "1";
+                    }
+                    else if(!controle_bens.isEmpty()) {
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "# Bens cadastrados com o código #\n"));
+                        for (Bem bens : controle_bens) {
+                            sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Nome do bem: "
+                                    + bens.getNome() + "\nDescrição: " + bens.getDescricao() + "\nLocalização: " +
+                                    bens.getLocalizacao().getNome() + "\nCategoria: " + bens.getCategoria().getNome()
+                                    + "\n" + "\nPara retornar ao menu digite /menu"));
+                        }
+                        controle_agrupamento_local = false;
+                        nome_localizacao = null;
+                        controle_bens.clear();
+                    }else {
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "# Bens cadastrados com o código #\n"
+                                + "- Nenhum bem está cadastrado com esse código. Tente novamente com "));
+                        controle_agrupamento_local = false;
+                        nome_localizacao = null;
+                        controle_bens.clear();
                     }
                 }
 
