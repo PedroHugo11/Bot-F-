@@ -484,6 +484,7 @@ public class Main {
                         controle_local_busca.clear();
                         controle_categoria_busca.clear();
                         localizacao = new Localizacao(null, null);
+                        categoria = new Categoria(null, null, null);
 
                     }
 
