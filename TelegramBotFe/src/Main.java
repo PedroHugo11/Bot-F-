@@ -7,7 +7,6 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.ChatAction;
 import com.pengrad.telegrambot.request.GetUpdates;
 import com.pengrad.telegrambot.request.SendChatAction;
-import com.pengrad.telegrambot.request.SendDocument;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.BaseResponse;
 import com.pengrad.telegrambot.response.GetUpdatesResponse;
@@ -34,6 +33,8 @@ public class Main {
         Bem bem = new Bem(null, null,null, null, null);
 
         ArrayList<Bem> controle_bens = new ArrayList<Bem>();
+        ArrayList<Localizacao> controle_local_busca = new ArrayList<Localizacao>();
+        ArrayList<Categoria> controle_categoria_busca = new ArrayList<Categoria>();
 
         boolean controle_agrupamento_local = false;
         boolean controle_localizacao = false;
@@ -442,41 +443,50 @@ public class Main {
                 }
 
                 //#################### 11 ESCOLHA ########################
-                else if (respostaMenu.equals("/gerar_relatorio") ||  controle_agrupamento_local) {
+                else if (respostaMenu.equals("/gerar_relatorio")) {
                     if (nome_localizacao == null){
-                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite a localização a ser buscada: "));
-                        nome_localizacao = update.message().text();
-                        controle_agrupamento_local = true;
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- ##### POR LOCAL ##### -"));
 
-                    }
-                    else if(nome_localizacao != "1"){
-                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- Digite 1 para confirmar a busca"));
-                        nome_localizacao = update.message().text();
-                        for (Bem busca_bem : gerencia.getBens()) {
-                            if(nome_localizacao.equals(busca_bem.getLocalizacao().getNome())) { // o erro deve ser aq
-                                controle_bens.add(busca_bem);
+                        for (Localizacao busca_local : gerencia.getLocalizacoes()) {
+                            controle_local_busca.add(busca_local);
+                        }
+
+                        for (Localizacao local : controle_local_busca) {
+                            sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "-"+local.getNome()+"-"));
+                            for (Bem bens : gerencia.getBens()) {
+                                if(local.getNome().equals(bens.getLocalizacao().getNome())) {
+                                    sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Nome do bem: "
+                                            + bens.getNome() + "\nDescrição: " + bens.getDescricao() + "\nLocalização: " +
+                                            bens.getLocalizacao().getNome() + "\nCategoria: " + bens.getCategoria().getNome()
+                                            + "\n" + "\nPara retornar ao menu digite /menu"));
+                                }
                             }
                         }
-                        nome_localizacao = "1";
-                    }
-                    else if(!controle_bens.isEmpty()) {
-                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "# Bens cadastrados com o código #\n"));
-                        for (Bem bens : controle_bens) {
-                            sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Nome do bem: "
-                                    + bens.getNome() + "\nDescrição: " + bens.getDescricao() + "\nLocalização: " +
-                                    bens.getLocalizacao().getNome() + "\nCategoria: " + bens.getCategoria().getNome()
-                                    + "\n" + "\nPara retornar ao menu digite /menu"));
+
+                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "- ##### POR CATEGORIA ##### -"));
+
+                        for (Categoria busca_categoria : gerencia.getCategorias()) {
+                            controle_categoria_busca.add(busca_categoria);
                         }
-                        controle_agrupamento_local = false;
-                        nome_localizacao = null;
-                        controle_bens.clear();
-                    }else {
-                        sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "# Bens cadastrados com o código #\n"
-                                + "- Nenhum bem está cadastrado com esse código. Tente novamente com "));
-                        controle_agrupamento_local = false;
-                        nome_localizacao = null;
-                        controle_bens.clear();
+
+                        for (Categoria categoria_busca : controle_categoria_busca) {
+                            sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "-"+categoria_busca.getNome()+"-"));
+                            for (Bem bens : gerencia.getBens()) {
+                                if(categoria_busca.getNome().equals(bens.getCategoria().getNome())) {
+                                    sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Nome do bem: "
+                                            + bens.getNome() + "\nDescrição: " + bens.getDescricao() + "\nLocalização: " +
+                                            bens.getLocalizacao().getNome() + "\nCategoria: " + bens.getCategoria().getNome()
+                                            + "\n" + "\nPara retornar ao menu digite /menu"));
+                                }
+                            }
+                        }
+
+                        controle_local_busca.clear();
+                        controle_categoria_busca.clear();
+                        localizacao = new Localizacao(null, null);
+
                     }
+
                 }
 
                 //envio de "Escrevendo" antes de enviar a resposta
