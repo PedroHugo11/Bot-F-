@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.TelegramBotAdapter;
@@ -35,9 +37,8 @@ public class Main {
         ArrayList<Bem> controle_bens = new ArrayList<Bem>();
         ArrayList<Localizacao> controle_local_busca = new ArrayList<Localizacao>();
         ArrayList<Categoria> controle_categoria_busca = new ArrayList<Categoria>();
-        ArrayList<String> controle_nome_busca = new ArrayList<String>();
+        SortedSet<String> controle_nome_busca = new TreeSet<String>();
 
-        boolean controle_agrupamento_local = false;
         boolean controle_localizacao = false;
         boolean controle_categoria = false;
         boolean controle_bem = false;
@@ -483,7 +484,7 @@ public class Main {
 
                         for (Bem busca_bem : gerencia.getBens()) {
                             if(!controle_nome_busca.contains(busca_bem.getNome()))
-                            controle_nome_busca.add(busca_bem.getNome());
+                                controle_nome_busca.add(busca_bem.getNome());
                         }
 
                         for (String nome_busca : controle_nome_busca) {
